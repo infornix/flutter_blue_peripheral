@@ -4,6 +4,8 @@ import CoreBluetooth
 
 public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDelegate {
 
+    var TAG = "[FrccbluePlugin] "
+
     var peripheralManager:CBPeripheralManager?
     var c:CBCentralManager?
     var channel:FlutterMethodChannel?
@@ -12,7 +14,7 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
     let characteristicDic:NSMutableDictionary = [:]
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "frccblue", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name:"frccblue", binaryMessenger: registrar.messenger())
     let instance = SwiftFrccbluePlugin()
         instance.channel = channel
         registrar.addMethodCallDelegate(instance, channel: channel)
@@ -22,26 +24,30 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
     private var Characteristic_UUID: String = "00000000-0000-0000-0000-AAAAAAAAAAA2"
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if call.method == "getPlatformVersion"{
-            result("iOS sss" + UIDevice.current.systemVersion)
+        if call.method == "getPlatformVersion" {
+            result("iOS " + UIDevice.current.systemVersion)
         }
         if call.method == "startPeripheral" {
-            print("startPeripheral")
+            print(TAG + "startPeripheral")
             let param = call.arguments as! Dictionary<String,String>
-            Service_UUID = param["serviceUUID"]!
-            Characteristic_UUID = param["characteristicUUID"]!
+            Service_UUID = param["serviceUuid"]!
+            Characteristic_UUID = param["characteristicUuid"]!
             peripheralManager = CBPeripheralManager.init(delegate: self, queue: .main)
         }
         if call.method == "stopPeripheral" {
-            print("stopPeripheral")
+            print(TAG + "stopPeripheral")
             peripheralManager?.stopAdvertising()
         }
         if call.method == "peripheralUpdateValue" {
             let param = call.arguments as! NSDictionary
-            let centraluuidString = param["centraluuidString"] as! NSString
-            let characteristicuuidString = param["characteristicuuidString"] as! NSString
+            let centralUuidString = param["centralUuidString"] as! NSString
+            let characteristicUuidString = param["characteristicUuidString"] as! NSString
             let data = param["data"] as! FlutterStandardTypedData
-            peripheralManager?.updateValue(data.data, for: (characteristicDic[0]) as! CBMutableCharacteristic, onSubscribedCentrals: [centralDic[centraluuidString] as! CBCentral])
+            peripheralManager?.updateValue(
+                data.data,
+                for: (characteristicDic[0]) as! CBMutableCharacteristic,
+                onSubscribedCentrals: [centralDic[centralUuidString] as! CBCentral],
+            )
         }
     }
 
@@ -49,29 +55,26 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
         var state = "unknown"
         switch peripheral.state {
         case .unknown:
-            print("未知的")
             state = "unknown"
         case .resetting:
-            print("重置中")
             state = "resetting"
         case .unsupported:
-            print("不支持")
             state = "unsupported"
         case .unauthorized:
-            print("未验证")
             state = "unauthorized"
         case .poweredOff:
-            print("未启动")
             state = "poweredOff"
             self.peripheralManager?.stopAdvertising()
         case .poweredOn:
-            print("可用")
             state = "poweredOn"
             setupServiceAndCharacteristics()
-            let deviceNmae = UIDevice.current.name;
-            self.peripheralManager?.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [CBUUID.init(string: Service_UUID)],CBAdvertisementDataLocalNameKey:deviceNmae])
-//                        self.peripheralManager?.startAdvertising([CBAdvertisementDataServiceUUIDsKey : [CBUUID.init(string: Service_UUID)]])
+            let deviceName = UIDevice.current.name;
+            self.peripheralManager?.startAdvertising(
+                [CBAdvertisementDataServiceUUIDsKey: [CBUUID.init(string: Service_UUID)],
+                CBAdvertisementDataLocalNameKey: deviceName,
+            ])
         }
+        print(TAG + "peripheralManagerDidUpdateState:" + state)
         channel?.invokeMethod("peripheralManagerDidUpdateState", arguments: state)
     }
 
@@ -79,30 +82,41 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
         let serviceID = CBUUID.init(string: Service_UUID)
         let service = CBMutableService.init(type: serviceID, primary: true)
         let characteristicID = CBUUID.init(string: Characteristic_UUID)
-        let characteristic = CBMutableCharacteristic.init(type: characteristicID,
-                                                          properties: [.read, .write, .notify],
-                                                          value: nil,
-                                                          permissions: [.readable, .writeable])
+        let characteristic = CBMutableCharacteristic.init(
+            type: characteristicID,
+            properties: [.read, .write, .notify],
+            permissions: [.readable, .writeable],
+            value: nil,
+        )
         service.characteristics = [characteristic]
         characteristicDic[0] = characteristic
         self.peripheralManager?.add(service)
     }
 
     public func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
-        print("didSubscribeTo"+central.identifier.uuidString)
+        print(TAG + "didSubscribeTo:" + central.identifier.uuidString)
         centralDic[central.identifier.uuidString] = central
-
-        channel?.invokeMethod("didSubscribeTo", arguments: ["centraluuidString":central.identifier.uuidString,"characteristicuuidString":characteristic.uuid.uuidString])
+        channel?.invokeMethod("didSubscribeTo", arguments: [
+            "centralUuidString": central.identifier.uuidString,
+            "characteristicUuidString": characteristic.uuid.uuidString,
+        ])
     }
 
     public func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didUnsubscribeFrom characteristic: CBCharacteristic) {
-        print("didUnsubscribeFrom"+central.identifier.uuidString)
+        print(TAG + "didUnsubscribeFrom:" + central.identifier.uuidString)
         centralDic[central.identifier.uuidString] = nil
-        channel?.invokeMethod("didUnsubscribeFrom", arguments: ["centraluuidString":central.identifier.uuidString,"characteristicuuidString":characteristic.uuid.uuidString])
+        channel?.invokeMethod("didUnsubscribeFrom", arguments: [
+            "centralUuidString": central.identifier.uuidString,
+            "characteristicUuidString": characteristic.uuid.uuidString,
+        ])
     }
 
     public func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        channel?.invokeMethod("didReceiveRead", arguments: ["centraluuidString":request.central.identifier.uuidString,"characteristicuuidString":request.characteristic.uuid.uuidString], result: { (data) in
+        channel?.invokeMethod("didReceiveRead", arguments: [
+            "centralUuidString": request.central.identifier.uuidString,
+            "characteristicUuidString": request.characteristic.uuid.uuidString,
+        ],
+        result: { (data) in
             if let da = data as? FlutterStandardTypedData {
                 request.value = da.data
             }
@@ -113,7 +127,11 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
     public func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
         for request in requests {
             if let data = request.value {
-                channel?.invokeMethod("didReceiveWrite", arguments: ["centraluuidString":request.central.identifier.uuidString,"characteristicuuidString":request.characteristic.uuid.uuidString,"data":FlutterStandardTypedData.init(bytes: data)])
+                channel?.invokeMethod("didReceiveWrite", arguments: [
+                    "centralUuidString": request.central.identifier.uuidString,
+                    "characteristicUuidString": request.characteristic.uuid.uuidString,
+                    "data": FlutterStandardTypedData.init(bytes: data),
+                ])
             }
             request.value = nil
             peripheral.respond(to: request, withResult: .success)

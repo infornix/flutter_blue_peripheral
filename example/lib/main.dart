@@ -1,8 +1,7 @@
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frccblue/frccblue.dart';
 
@@ -32,22 +31,33 @@ class _MyAppState extends State<MyApp> {
       platformVersion = 'Failed to get platform version.';
     }
 
-    Frccblue.init(didReceiveRead:(MethodCall call){
+    Frccblue.init(didReceiveRead: (MethodCall call) {
       print(call.arguments);
-      return Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,]);
-    }, didReceiveWrite:(MethodCall call){
-      Frccblue.peripheralUpdateValue(call.arguments["centraluuidString"],call.arguments["characteristicuuidString"],Uint8List.fromList([11,2,3]));
+      return Uint8List.fromList([11,2,3,4,5,6,7,8,9,10]);
+    }, didReceiveWrite: (MethodCall call) {
+      Frccblue.peripheralUpdateValue(
+        centralUuid: call.arguments["centralUuidString"],
+        characteristicUuid: call.arguments["characteristicUuidString"],
+        data: Uint8List.fromList([11,2,3]),
+      );
       print(call.arguments);
-    },didSubscribeTo: (MethodCall call){
+    }, didSubscribeTo: (MethodCall call) {
       print(call.arguments);
-      Frccblue.peripheralUpdateValue(call.arguments["centraluuidString"],call.arguments["characteristicuuidString"],Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,11,2,3]));
-    },didUnsubscribeFrom: (MethodCall call){
+      Frccblue.peripheralUpdateValue(
+        centralUuid: call.arguments["centralUuidString"],
+        characteristicUuid: call.arguments["characteristicUuidString"],
+        data: Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,11,2,3]),
+      );
+    }, didUnsubscribeFrom: (MethodCall call) {
       print(call.arguments);
-    },peripheralManagerDidUpdateState: (MethodCall call){
+    }, peripheralManagerDidUpdateState: (MethodCall call) {
       print(call.arguments);
     });
 
-    Frccblue.startPeripheral("00000000-0000-0000-0000-AAAAAAAAAAA1", "00000000-0000-0000-0000-AAAAAAAAAAA2").then((_){});
+    Frccblue.startPeripheral(
+      serviceUuid: "00000000-0000-0000-0000-AAAAAAAAAAA1",
+      characteristicUuid: "00000000-0000-0000-0000-AAAAAAAAAAA2",
+    ).then((_){});
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
