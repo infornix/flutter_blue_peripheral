@@ -49,8 +49,8 @@ class Frccblue {
     required Uint8List data,
   }) async {
     await _channel.invokeMethod('peripheralUpdateValue', {
-      'centralUuidString': centralUuid,
-      'characteristicUuidString': characteristicUuid,
+      'centralUuid': centralUuid,
+      'characteristicUuid': characteristicUuid,
       'data': data,
     });
   }

@@ -36,16 +36,16 @@ class _MyAppState extends State<MyApp> {
       return Uint8List.fromList([11,2,3,4,5,6,7,8,9,10]);
     }, didReceiveWrite: (MethodCall call) {
       Frccblue.peripheralUpdateValue(
-        centralUuid: call.arguments["centralUuidString"],
-        characteristicUuid: call.arguments["characteristicUuidString"],
+        centralUuid: call.arguments["centralUuid"],
+        characteristicUuid: call.arguments["characteristicUuid"],
         data: Uint8List.fromList([11,2,3]),
       );
       print(call.arguments);
     }, didSubscribeTo: (MethodCall call) {
       print(call.arguments);
       Frccblue.peripheralUpdateValue(
-        centralUuid: call.arguments["centralUuidString"],
-        characteristicUuid: call.arguments["characteristicUuidString"],
+        centralUuid: call.arguments["centralUuid"],
+        characteristicUuid: call.arguments["characteristicUuid"],
         data: Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,11,2,3]),
       );
     }, didUnsubscribeFrom: (MethodCall call) {

@@ -57,11 +57,13 @@ class FrccbluePlugin() : MethodCallHandler {
             stopPeripheral()
         }
         if (call.method.equals("peripheralUpdateValue")) {
-            var centralUuidString = call.argument<String>("centralUuidString")
-            var characteristicUuidString = call.argument<String>("characteristicUuidString")
+            var centralUuid = call.argument<String>("centralUuid")
+            var characteristicUuid = call.argument<String>("characteristicUuid")
             var data = call.argument<ByteArray>("data")
 
-            val device = centralsDic.get(centralUuidString)
+            val device = centralsDic.get(centralUuid)
+            // val characteristic = characteristicsDic.get(characteristicUuid)
+            // characteristic?.setValue(data)
             mCharacteristic?.value = data
             mGattServer?.notifyCharacteristicChanged(device, mCharacteristic, false)
         }
@@ -227,8 +229,8 @@ class FrccbluePlugin() : MethodCallHandler {
                 Log.i(TAG, "onConnectionStateChange STATE_DISCONNECTED:" + device.address)
                 handler.post(Runnable {
                     channel?.invokeMethod("didUnsubscribeFrom", hashMapOf(
-                        "centralUuidString" to device?.address!!,
-                        "characteristicUuidString" to "",
+                        "centralUuid" to device?.address!!,
+                        "characteristicUuid" to "",
                     ))
                 })
             }
@@ -256,8 +258,8 @@ class FrccbluePlugin() : MethodCallHandler {
                 }
                 handler.post(Runnable {
                     channel?.invokeMethod("didReceiveRead", hashMapOf(
-                        "centralUuidString" to device?.address,
-                        "characteristicUuidString" to characteristic.uuid.toString(),
+                        "centralUuid" to device?.address,
+                        "characteristicUuid" to characteristic.uuid.toString(),
                     ), cb);
                 })
             }
@@ -279,8 +281,8 @@ class FrccbluePlugin() : MethodCallHandler {
             if (UUID.fromString(Characteristic_UUID) == characteristic.uuid) {
                 handler.post(Runnable {
                     channel?.invokeMethod("didReceiveWrite", hashMapOf(
-                        "centralUuidString" to device?.address,
-                        "characteristicUuidString" to characteristic.uuid.toString(),
+                        "centralUuid" to device?.address,
+                        "characteristicUuid" to characteristic.uuid.toString(),
                         "data" to value,
                     ))
                 })
@@ -321,8 +323,8 @@ class FrccbluePlugin() : MethodCallHandler {
                 characteristicsDic.remove(descriptor?.characteristic?.uuid.toString())
                 handler.post(Runnable {
                     channel?.invokeMethod("didUnsubscribeFrom", hashMapOf(
-                        "centralUuidString" to device?.address!!,
-                        "characteristicUuidString" to descriptor?.characteristic?.uuid.toString(),
+                        "centralUuid" to device?.address!!,
+                        "characteristicUuid" to descriptor?.characteristic?.uuid.toString(),
                     ))
                 })
             } else {
@@ -330,8 +332,8 @@ class FrccbluePlugin() : MethodCallHandler {
                 characteristicsDic.put(descriptor?.characteristic?.uuid.toString(), descriptor?.characteristic!!)
                 handler.post(Runnable {
                     channel?.invokeMethod("didSubscribeTo", hashMapOf(
-                        "centralUuidString" to device?.address!!,
-                        "characteristicUuidString" to descriptor?.characteristic?.uuid.toString(),
+                        "centralUuid" to device?.address!!,
+                        "characteristicUuid" to descriptor?.characteristic?.uuid.toString(),
                     ))
                 })
             }
