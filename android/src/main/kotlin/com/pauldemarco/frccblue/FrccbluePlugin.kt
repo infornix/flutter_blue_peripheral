@@ -47,7 +47,7 @@ class FrccbluePlugin() : MethodCallHandler {
             result.success("Android ${android.os.Build.VERSION.RELEASE}")
         }
         if (call.method.equals("startPeripheral")) {
-            Log.i(this., "startPeripheral")
+            Log.i(TAG, "startPeripheral")
             Service_UUID = call.argument<String>("serviceUuid").toString()
             Characteristic_UUID = call.argument<String>("characteristicUuid").toString()
             startPeripheral()
@@ -348,9 +348,9 @@ class FrccbluePlugin() : MethodCallHandler {
             mGattServer!!.close()
         }
 
-        // If stopPeripheral() gets called before close() a null
+        // If stopAdvertising() gets called before close() a null
         // pointer exception is raised.
-        mAdvertiser!!.stopPeripheral(mAdvCallback)
+        mAdvertiser!!.stopAdvertising(mAdvCallback)
     }
 
     /*

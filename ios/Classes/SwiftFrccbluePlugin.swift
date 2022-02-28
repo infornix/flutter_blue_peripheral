@@ -41,12 +41,17 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
         if call.method == "peripheralUpdateValue" {
             let param = call.arguments as! NSDictionary
             let centralUuid = param["centralUuid"] as! NSString
-            let characteristicUuid = param["characteristicUuid"] as! NSString
+            // let characteristicUuid = param["characteristicUuid"] as! NSString
             let data = param["data"] as! FlutterStandardTypedData
+            // peripheralManager?.updateValue(
+            //     data.data,
+            //     for: (characteristicDic[characteristicUuid]) as! CBMutableCharacteristic,
+            //     onSubscribedCentrals: [centralDic[centralUuid] as! CBCentral]
+            // )
             peripheralManager?.updateValue(
                 data.data,
                 for: (characteristicDic[0]) as! CBMutableCharacteristic,
-                onSubscribedCentrals: [centralDic[centralUuid] as! CBCentral],
+                onSubscribedCentrals: [centralDic[centralUuid] as! CBCentral]
             )
         }
     }
@@ -73,6 +78,8 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
                 [CBAdvertisementDataServiceUUIDsKey: [CBUUID.init(string: Service_UUID)],
                 CBAdvertisementDataLocalNameKey: deviceName,
             ])
+        @unknown default:
+            state = "unknown"
         }
         print(TAG + "peripheralManagerDidUpdateState:" + state)
         channel?.invokeMethod("peripheralManagerDidUpdateState", arguments: state)
@@ -85,8 +92,8 @@ public class SwiftFrccbluePlugin: NSObject, FlutterPlugin, CBPeripheralManagerDe
         let characteristic = CBMutableCharacteristic.init(
             type: characteristicID,
             properties: [.read, .write, .notify],
-            permissions: [.readable, .writeable],
             value: nil,
+            permissions: [.readable, .writeable]
         )
         service.characteristics = [characteristic]
         characteristicDic[0] = characteristic
