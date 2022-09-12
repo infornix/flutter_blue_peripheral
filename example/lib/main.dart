@@ -1,15 +1,18 @@
 
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:frccblue/frccblue.dart';
+import 'package:flutter_blue_peripheral/flutter_blue_peripheral.dart';
 
-void main() => runApp(new MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -25,17 +28,18 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
     try {
-      platformVersion = await Frccblue.platformVersion;
+      platformVersion = await FlutterBluePeripheral.platformVersion ?? 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    Frccblue.init(didReceiveRead: (MethodCall call) {
+    FlutterBluePeripheral.init(didReceiveRead: (MethodCall call) {
       print(call.arguments);
       return Uint8List.fromList([11,2,3,4,5,6,7,8,9,10]);
     }, didReceiveWrite: (MethodCall call) {
-      Frccblue.peripheralUpdateValue(
+      FlutterBluePeripheral.peripheralUpdateValue(
         centralUuid: call.arguments["centralUuid"],
         characteristicUuid: call.arguments["characteristicUuid"],
         data: Uint8List.fromList([11,2,3]),
@@ -43,7 +47,7 @@ class _MyAppState extends State<MyApp> {
       print(call.arguments);
     }, didSubscribeTo: (MethodCall call) {
       print(call.arguments);
-      Frccblue.peripheralUpdateValue(
+      FlutterBluePeripheral.peripheralUpdateValue(
         centralUuid: call.arguments["centralUuid"],
         characteristicUuid: call.arguments["characteristicUuid"],
         data: Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,11,2,3]),
@@ -54,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       print(call.arguments);
     });
 
-    Frccblue.startPeripheral(
+    FlutterBluePeripheral.startPeripheral(
       serviceUuid: "00000000-0000-0000-0000-AAAAAAAAAAA1",
       characteristicUuid: "00000000-0000-0000-0000-AAAAAAAAAAA2",
     ).then((_){});
@@ -71,13 +75,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: new Center(
-          child: new Text('Running111 on: $_platformVersion\n'),
+        body: Center(
+          child: Text('Running on: $_platformVersion\n'),
         ),
       ),
     );

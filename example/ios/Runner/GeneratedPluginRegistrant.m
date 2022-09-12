@@ -6,16 +6,16 @@
 
 #import "GeneratedPluginRegistrant.h"
 
-#if __has_include(<frccblue/FrccbluePlugin.h>)
-#import <frccblue/FrccbluePlugin.h>
+#if __has_include(<flutter_blue_peripheral/FlutterBluePeripheralPlugin.h>)
+#import <flutter_blue_peripheral/FlutterBluePeripheralPlugin.h>
 #else
-@import frccblue;
+@import flutter_blue_peripheral;
 #endif
 
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [FrccbluePlugin registerWithRegistrar:[registry registrarForPlugin:@"FrccbluePlugin"]];
+  [FlutterBluePeripheralPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterBluePeripheralPlugin"]];
 }
 
 @end

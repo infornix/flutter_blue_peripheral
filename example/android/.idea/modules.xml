@@ -3,6 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.iml" filepath="$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/-1174901586/android.flutter_blue_peripheral.unitTest.iml" />
     </modules>
   </component>
 </project>
