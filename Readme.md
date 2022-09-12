@@ -56,23 +56,23 @@ iOS の更新ステータス:
 ```
 switch peripheral.state {
         case .unknown:
-            print("未知的")
+            print("Unknown")
             state = "unknown"
         case .resetting:
-            print("重置中")
+            print("Resetting")
             state = "resetting"
         case .unsupported:
-            print("不支持")
+            print("Unsupported")
             state = "unsupported"
         case .unauthorized:
-            print("未验证")
+            print("Unauthorized")
             state = "unauthorized"
         case .poweredOff:
-            print("未启动")
+            print("Not Started")
             state = "poweredOff"
             self.peripheralManager?.stopAdvertising()
         case .poweredOn:
-            print("可用")
+            print("Available")
             state = "poweredOn"
 ```
 
