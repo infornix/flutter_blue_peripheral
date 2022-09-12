@@ -14,19 +14,21 @@ For help getting started with Flutter development, view the
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-# 平台
-iOS android
+## プラットフォーム
 
-# 使用
+iOS / Android
+
+## 利用方法
+
 ```
 dependencies:
-  frccblue:
+  flutter_blue_peripheral:
     git:
-      url: https://github.com/frcc00/frccblue
+      url: https://github.com/tsukumijima/flutter_blue_peripheral
 ```
-      
-      
-# 调用
+
+## 移行
+
 ```
 Frccblue.init(didReceiveRead:(MethodCall call){
       print(call.arguments);
@@ -45,9 +47,12 @@ Frccblue.init(didReceiveRead:(MethodCall call){
 Frccblue.startPeripheral("00000000-0000-0000-0000-AAAAAAAAAAA1", "00000000-0000-0000-0000-AAAAAAAAAAA2").then((_){});
 ```
 
-# more
-## peripheralManagerDidUpdateState
-iOS上传状态
+## more
+
+### peripheralManagerDidUpdateState
+
+iOS の更新ステータス:
+
 ```
 switch peripheral.state {
         case .unknown:
@@ -70,13 +75,14 @@ switch peripheral.state {
             print("可用")
             state = "poweredOn"
 ```
-android上传状态
+
+Android の更新ステータス：
+
 ```
 "unknown"
 "poweredOff"
 "poweredOn"
 ```
 
-
-由于iOS没有设备连上和断开连接的回掉，android有；所以统一要求中心设备订阅Characteristic。
-那么didSubscribeTo表示设备连上，didUnsubscribeFrom表示设备断开。android端didUnsubscribeFrom会被触发2次，在设备主动取消订阅的情况下。
+iOS にはデバイスの接続と切断のコールバックがありませんが、Android にはあります。したがって、セントラルデバイスは Characteristic をサブスクライブする必要があります。  
+次に、didSubscribeTo はデバイスが接続されていることを意味し、didUnsubscribeFrom はデバイスが切断されていることを意味します。Android 側の didUnsubscribeFrom は、デバイスがアクティブにサブスクリプションをキャンセルした場合に 2 回トリガーされます。
