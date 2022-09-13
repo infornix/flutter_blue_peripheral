@@ -1,24 +1,13 @@
 
 # flutter_blue_peripheral
 
-A new Flutter plugin project.
+Flutter Bluetooth LE (BLE) Peripheral Plugin.
 
-## Getting Started
-
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
-
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-## プラットフォーム
+## Supported platforms
 
 iOS / Android
 
-## 利用方法
+## How to use
 
 ```
 dependencies:
@@ -27,56 +16,62 @@ dependencies:
       url: https://github.com/tsukumijima/flutter_blue_peripheral
 ```
 
-## 移行
-
 ```
-Frccblue.init(didReceiveRead:(MethodCall call){
+import 'package:flutter_blue_peripheral/flutter_blue_peripheral.dart';
+
+// initialize
+FlutterBluePeripheral.init(didReceiveRead:(MethodCall call){
       print(call.arguments);
       return Uint8List.fromList([11,2,3,4,5,6,7,8,9,10,]);
     }, didReceiveWrite:(MethodCall call){
       print(call.arguments);
     },didSubscribeTo: (MethodCall call){
       print(call.arguments);
-//      Frccblue.peripheralUpdateValue()
+//      FlutterBluePeripheral.peripheralUpdateValue()
     },didUnsubscribeFrom: (MethodCall call){
       print(call.arguments);
     },peripheralManagerDidUpdateState: (MethodCall call){
       print(call.arguments);
     });
 
-Frccblue.startPeripheral("00000000-0000-0000-0000-AAAAAAAAAAA1", "00000000-0000-0000-0000-AAAAAAAAAAA2").then((_){});
+
+// start peripheral server
+FlutterBluePeripheral.startPeripheral("00000000-0000-0000-0000-AAAAAAAAAAA1", "00000000-0000-0000-0000-AAAAAAAAAAA2").then((_){});
+
+// stop peripheral server
+FlutterBluePeripheral.stopPeripheral();
 ```
 
-## more
+## More
 
 ### peripheralManagerDidUpdateState
 
-iOS の更新ステータス:
+iOS UpdateState:
 
 ```
 switch peripheral.state {
-        case .unknown:
-            print("Unknown")
-            state = "unknown"
-        case .resetting:
-            print("Resetting")
-            state = "resetting"
-        case .unsupported:
-            print("Unsupported")
-            state = "unsupported"
-        case .unauthorized:
-            print("Unauthorized")
-            state = "unauthorized"
-        case .poweredOff:
-            print("Not Started")
-            state = "poweredOff"
-            self.peripheralManager?.stopAdvertising()
-        case .poweredOn:
-            print("Available")
-            state = "poweredOn"
+    case .unknown:
+        print("Unknown")
+        state = "unknown"
+    case .resetting:
+        print("Resetting")
+        state = "resetting"
+    case .unsupported:
+        print("Unsupported")
+        state = "unsupported"
+    case .unauthorized:
+        print("Unauthorized")
+        state = "unauthorized"
+    case .poweredOff:
+        print("Not Started")
+        state = "poweredOff"
+        self.peripheralManager?.stopAdvertising()
+    case .poweredOn:
+        print("Available")
+        state = "poweredOn"
 ```
 
-Android の更新ステータス：
+Android UpdateState：
 
 ```
 "unknown"
@@ -84,5 +79,5 @@ Android の更新ステータス：
 "poweredOn"
 ```
 
-iOS にはデバイスの接続と切断のコールバックがありませんが、Android にはあります。したがって、セントラルデバイスは Characteristic をサブスクライブする必要があります。  
-次に、didSubscribeTo はデバイスが接続されていることを意味し、didUnsubscribeFrom はデバイスが切断されていることを意味します。Android 側の didUnsubscribeFrom は、デバイスがアクティブにサブスクリプションをキャンセルした場合に 2 回トリガーされます。
+iOS does not have device connect and disconnect callbacks, but Android does. Therefore, the central device should subscribe to the Characteristic.  
+Then didSubscribeTo means the device is connected and didUnsubscribeFrom means the device is disconnected. didUnsubscribeFrom on the Android side he is triggered twice if the device actively cancels the subscription.
