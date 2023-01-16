@@ -5,12 +5,12 @@
 Pod::Spec.new do |s|
   s.name             = 'flutter_blue_peripheral'
   s.version          = '0.1.0'
-  s.summary          = 'A new Flutter plugin project.'
+  s.summary          = 'Flutter Bluetooth LE (BLE) Peripheral Plugin.'
   s.description      = <<-DESC
-A new Flutter plugin project.
+Flutter Bluetooth LE (BLE) Peripheral Plugin.
                        DESC
-  s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
+  s.homepage         = 'https://github.com/tsukumijima/flutter_blue_peripheral'
+  s.license          = { :file => '../License.txt' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
