@@ -92,9 +92,9 @@ public class SwiftFlutterBluePeripheralPlugin: NSObject, FlutterPlugin, CBPeriph
         let characteristicID = CBUUID.init(string: Characteristic_UUID)
         let characteristic = CBMutableCharacteristic.init(
             type: characteristicID,
-            properties: [.read, .write, .notify],
+            properties: [.writeWithoutResponse],
             value: nil,
-            permissions: [.readable, .writeable]
+            permissions: [.writeable]
         )
         service.characteristics = [characteristic]
         characteristicDic[0] = characteristic

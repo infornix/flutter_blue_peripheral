@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.tsukumijima.flutter_blue_peripheral_example">
+    package="it.nix.flutter_blue_peripheral_example">
    <application
         android:label="flutter_blue_peripheral_example"
         android:name="${applicationName}"

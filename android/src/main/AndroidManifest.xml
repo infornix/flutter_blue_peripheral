@@ -1,4 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="net.tsukumijima.flutter_blue_peripheral">
+  package="it.nix.flutter_blue_peripheral">
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
 </manifest>

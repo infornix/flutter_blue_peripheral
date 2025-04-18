@@ -1,4 +1,4 @@
-group 'net.tsukumijima.flutter_blue_peripheral'
+group 'it.nix.flutter_blue_peripheral'
 version '1.0-SNAPSHOT'
 
 buildscript {

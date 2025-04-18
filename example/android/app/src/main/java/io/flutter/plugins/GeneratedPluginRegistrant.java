@@ -16,9 +16,9 @@ public final class GeneratedPluginRegistrant {
   private static final String TAG = "GeneratedPluginRegistrant";
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
-      flutterEngine.getPlugins().add(new net.tsukumijima.flutter_blue_peripheral.FlutterBluePeripheralPlugin());
+      flutterEngine.getPlugins().add(new it.nix.flutter_blue_peripheral.FlutterBluePeripheralPlugin());
     } catch(Exception e) {
-      Log.e(TAG, "Error registering plugin flutter_blue_peripheral, net.tsukumijima.flutter_blue_peripheral.FlutterBluePeripheralPlugin", e);
+      Log.e(TAG, "Error registering plugin flutter_blue_peripheral, it.nix.flutter_blue_peripheral.FlutterBluePeripheralPlugin", e);
     }
   }
 }

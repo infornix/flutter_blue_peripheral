@@ -1,5 +1,5 @@
 
-package net.tsukumijima.flutter_blue_peripheral
+package it.nix.flutter_blue_peripheral
 
 import android.app.Activity
 import android.bluetooth.*
@@ -181,9 +181,8 @@ class FlutterBluePeripheralPlugin: FlutterPlugin, MethodCallHandler, ActivityAwa
 
         mCharacteristic = BluetoothGattCharacteristic(
             UUID.fromString(Characteristic_UUID),
-            //Read write characteristic, supports notifications
-            BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_NOTIFY or BluetoothGattCharacteristic.PROPERTY_WRITE,
-            BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE or BluetoothGattCharacteristic.PROPERTY_NOTIFY,
+            BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE,
+            BluetoothGattCharacteristic.PERMISSION_WRITE,
         )
 
         val bluetoothGattDescriptor = BluetoothGattDescriptor(

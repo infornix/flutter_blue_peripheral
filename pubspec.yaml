@@ -1,7 +1,7 @@
 name: flutter_blue_peripheral
 description: Flutter Bluetooth LE (BLE) Peripheral Plugin.
-version: 0.1.0
-homepage: https://github.com/tsukumijima/flutter_blue_peripheral
+version: 1.0.0
+homepage: https://github.com/infornix/flutter_blue_peripheral
 
 environment:
   sdk: '>=2.18.0 <3.0.0'
@@ -35,7 +35,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: net.tsukumijima.flutter_blue_peripheral
+        package: it.nix.flutter_blue_peripheral
         pluginClass: FlutterBluePeripheralPlugin
       ios:
         pluginClass: FlutterBluePeripheralPlugin
